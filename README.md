@@ -11,6 +11,6 @@ int sizeY;
 int sizeZ;
 ```
 
-...we'll feel the urge to merge connected voxels into larger cuboids to save storage space and also computing resources. To do this efficiently **and** fast turns out to be quite complicated. 
+...for every Voxel. We'll feel the urge to merge connected voxels into larger cuboids to save storage space and also computing resources. To do this efficiently **and** fast turns out to be quite complicated. 
 
 This little program was used as a testing platform to play with different strategies to merge multiple voxels
