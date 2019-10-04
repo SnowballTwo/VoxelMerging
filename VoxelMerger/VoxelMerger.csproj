@@ -46,7 +46,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Strategies\AdaptiveMergedStickStrategy.cs" />
+    <Compile Include="Strategies\FixedMergedStickStrategy.cs" />
     <Compile Include="Strategies\FixedStickStrategy.cs" />
+    <Compile Include="Strategies\MergedStickStrategy.cs" />
     <Compile Include="Strategies\StickStrategy.cs" />
     <Compile Include="Strategies\Strategy.cs" />
     <Compile Include="Strategies\AdaptiveStickStrategy.cs" />

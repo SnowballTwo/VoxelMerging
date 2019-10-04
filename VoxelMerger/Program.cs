@@ -14,6 +14,9 @@ namespace VoxelMerger
             CompressWithStrategy( defects, new FixedStickStrategy(1) );
             CompressWithStrategy( defects, new FixedStickStrategy(2) );
             CompressWithStrategy( defects, new AdaptiveStickStrategy() );
+            CompressWithStrategy( defects, new FixedMergedStickStrategy(0) );
+            CompressWithStrategy( defects, new FixedMergedStickStrategy(1) );
+            CompressWithStrategy( defects, new FixedMergedStickStrategy(2) );
             CompressWithStrategy( defects, new AdaptiveMergedStickStrategy() );
             
             Console.ReadKey();
@@ -46,8 +49,8 @@ namespace VoxelMerger
             Console.WriteLine();
         }
 
-        private static Defect[] GetDefects()
-        {
+        private static Defect[] GetDefectsFromFile()
+        { 
             using( var stream = File.OpenRead( "TestData/defects.raw" ) )
             using( var reader = new BinaryReader( stream ) )
             {
@@ -59,6 +62,27 @@ namespace VoxelMerger
 
                 return defects;
             }
+        }
+
+        private static Defect[] GetDefects()
+        {
+            /*return new[]
+            {
+                new Defect( 0, 0, 0, 2, 2, 3, new[]
+                {
+                    new Voxel( 0, 0, 0 ),
+                    new Voxel( 0, 0, 1 ),
+                    new Voxel( 0, 1, 0 ),
+                    new Voxel( 0, 1, 1 ),
+                    new Voxel( 1, 0, 0 ),
+                    new Voxel( 1, 0, 1 ),
+                    new Voxel( 1, 1, 0 ),
+                    new Voxel( 1, 1, 1 ),
+                    new Voxel( 1, 1, 2 ),
+                } )
+            };*/
+
+            return GetDefectsFromFile();
         }
     }
 }

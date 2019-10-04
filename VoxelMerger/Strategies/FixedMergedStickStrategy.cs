@@ -1,14 +1,12 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace VoxelMerger.Strategies
 {
-    public class FixedStickStrategy : StickStrategy
+    public class FixedMergedStickStrategy : MergedStickStrategy
     {
         private readonly int _Dimension;
 
-        public FixedStickStrategy( int dimension )
+        public FixedMergedStickStrategy( int dimension )
         {
             _Dimension = dimension;
         }
@@ -17,9 +15,9 @@ namespace VoxelMerger.Strategies
             get {
                 switch( _Dimension )
                 {
-                    case 0: return "Sticks (X)";
-                    case 1: return "Sticks (Y)";
-                    case 2: return "Sticks (Z)";
+                    case 0: return "Merged sticks (X)";
+                    case 1: return "Merged sticks (Y)";
+                    case 2: return "Merged sticks (Z)";
                     default:
                         throw new ArgumentException();
                 }
@@ -28,7 +26,7 @@ namespace VoxelMerger.Strategies
 
         public override Defect Compress( Defect defect )
         {
-            return new Defect( defect, CreateSticks( defect, _Dimension ).SelectMany( a => a.Where( v => v != null ).SelectMany( b => b.Where( v => v != null ) ) ).ToArray());
+            return Compress( defect, _Dimension );
         }
     }
 }
