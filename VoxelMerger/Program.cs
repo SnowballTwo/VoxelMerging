@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using VoxelMerger.Model;
 using VoxelMerger.Strategies;
 
 namespace VoxelMerger
@@ -8,38 +11,38 @@ namespace VoxelMerger
     {
         public static void Main( string[] args )
         {
-            var defects = GetDefects();
+            var voxelGroups = GetVoxelGroups();
 
-            CompressWithStrategy( defects, new FixedStickStrategy(0) );
-            CompressWithStrategy( defects, new FixedStickStrategy(1) );
-            CompressWithStrategy( defects, new FixedStickStrategy(2) );
-            CompressWithStrategy( defects, new AdaptiveStickStrategy() );
-            CompressWithStrategy( defects, new FixedMergedStickStrategy(0) );
-            CompressWithStrategy( defects, new FixedMergedStickStrategy(1) );
-            CompressWithStrategy( defects, new FixedMergedStickStrategy(2) );
-            CompressWithStrategy( defects, new AdaptiveMergedStickStrategy() );
+            CompressWithStrategy( voxelGroups, new FixedStickStrategy(0) );
+            CompressWithStrategy( voxelGroups, new FixedStickStrategy(1) );
+            CompressWithStrategy( voxelGroups, new FixedStickStrategy(2) );
+            CompressWithStrategy( voxelGroups, new AdaptiveStickStrategy() );
+            CompressWithStrategy( voxelGroups, new FixedMergedStickStrategy(0) );
+            CompressWithStrategy( voxelGroups, new FixedMergedStickStrategy(1) );
+            CompressWithStrategy( voxelGroups, new FixedMergedStickStrategy(2) );
+            CompressWithStrategy( voxelGroups, new AdaptiveMergedStickStrategy() );
+            CompressWithStrategy( voxelGroups, new BestMergedStickStrategy());
             
             Console.ReadKey();
         }
 
-        private static void CompressWithStrategy( Defect[] defects, Strategy strategy )
+        private static void CompressWithStrategy( VoxelGroup[] voxelGroups, Strategy strategy )
         {
             var before = 0;
             var after = 0;
 
-
             Console.WriteLine( "Strategy: " + strategy.Name );
 
-            foreach( var defect in defects )
+            foreach( var voxelGroup in voxelGroups )
             {
-                var compressed = strategy.Compress( defect );
-                if( !Equals( defect, compressed ) )
+                var compressed = strategy.Compress( voxelGroup );
+                if( !Equals( voxelGroup, compressed ) )
                 {
                     Console.WriteLine( "Faulty compression" );
                     Console.ReadKey();
                 }
 
-                before += defect.Voxels.Length;
+                before += voxelGroup.Voxels.Length;
                 after += compressed.Voxels.Length;
             }
 
@@ -49,40 +52,25 @@ namespace VoxelMerger
             Console.WriteLine();
         }
 
-        private static Defect[] GetDefectsFromFile()
+        private static VoxelGroup[] GetVoxelGroupsFromFile()
         { 
             using( var stream = File.OpenRead( "TestData/defects.raw" ) )
             using( var reader = new BinaryReader( stream ) )
             {
-                var defectCount = reader.ReadInt32();
-                var defects = new Defect[defectCount];
+                var voxelGroupCount = reader.ReadInt32();
+                
+                var voxelGroups = new VoxelGroup[voxelGroupCount];
+                
+                for( var i = 0; i < voxelGroupCount; i++ )
+                    voxelGroups[ i ] = VoxelGroup.Deserialize( reader );
 
-                for( var i = 0; i < defectCount; i++ )
-                    defects[ i ] = Defect.Deserialize( reader );
-
-                return defects;
+                return voxelGroups;
             }
         }
 
-        private static Defect[] GetDefects()
+        private static VoxelGroup[] GetVoxelGroups()
         {
-            /*return new[]
-            {
-                new Defect( 0, 0, 0, 2, 2, 3, new[]
-                {
-                    new Voxel( 0, 0, 0 ),
-                    new Voxel( 0, 0, 1 ),
-                    new Voxel( 0, 1, 0 ),
-                    new Voxel( 0, 1, 1 ),
-                    new Voxel( 1, 0, 0 ),
-                    new Voxel( 1, 0, 1 ),
-                    new Voxel( 1, 1, 0 ),
-                    new Voxel( 1, 1, 1 ),
-                    new Voxel( 1, 1, 2 ),
-                } )
-            };*/
-
-            return GetDefectsFromFile();
+            return GetVoxelGroupsFromFile();
         }
     }
 }

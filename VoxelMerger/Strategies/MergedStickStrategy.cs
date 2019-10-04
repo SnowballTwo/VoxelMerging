@@ -1,22 +1,24 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using VoxelMerger.Model;
 
 namespace VoxelMerger.Strategies
 {
     public abstract class MergedStickStrategy : StickStrategy
     {
-        protected Defect Compress( Defect defect, int dimension )
+        protected VoxelGroup Compress( VoxelGroup voxelGroup, int dimension )
         {
-            var sticks = CreateSticks( defect, dimension );
+            var sticks = CreateSticks( voxelGroup, dimension );
 
             var finished = false;
 
             while( !finished ) finished = !Merge( sticks );
 
             var voxels = sticks.SelectMany( a => a.Where( v => v != null ).SelectMany( b => b.Where( v => v != null ) ) ).ToArray();
-            return new Defect( defect, voxels );
+            return new VoxelGroup( voxelGroup, voxels );
         }
-        
+      
         private static bool Merge( List<Voxel>[][] sticks )
         {
             var modified = false;

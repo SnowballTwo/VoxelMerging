@@ -1,4 +1,5 @@
 using System;
+using VoxelMerger.Model;
 
 namespace VoxelMerger.Strategies
 {
@@ -24,9 +25,9 @@ namespace VoxelMerger.Strategies
             }
         }
 
-        public override Defect Compress( Defect defect )
+        public override VoxelGroup Compress( VoxelGroup voxelGroup )
         {
-            return Compress( defect, _Dimension );
+            return Compress( voxelGroup, _Dimension );
         }
     }
 }

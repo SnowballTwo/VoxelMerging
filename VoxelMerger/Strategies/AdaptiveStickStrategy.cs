@@ -1,4 +1,5 @@
 using System.Linq;
+using VoxelMerger.Model;
 
 namespace VoxelMerger.Strategies
 {
@@ -6,14 +7,14 @@ namespace VoxelMerger.Strategies
     {
         public override string Name { get; } = "Sticks (Auto)";
 
-        public override Defect Compress( Defect defect )
+        public override VoxelGroup Compress( VoxelGroup voxelGroup )
         {
             var max = 0;
             for (var i = 0; i < 3; i++)
-                if( defect.GetSize( i ) > defect.GetSize( max ) )
+                if ( GetSize( voxelGroup, i ) > GetSize( voxelGroup, max ) )
                     max = i;
             
-            return new Defect( defect, CreateSticks( defect, max ).SelectMany( a => a.Where( v => v != null ).SelectMany( b => b.Where( v => v != null ) ) ).ToArray());
+            return new VoxelGroup( voxelGroup, CreateSticks( voxelGroup, max ).SelectMany( a => a.Where( v => v != null ).SelectMany( b => b.Where( v => v != null ) ) ).ToArray());
         }
     }
 }

@@ -3,6 +3,9 @@ using System.IO;
 
 namespace VoxelMerger
 {
+    /// <summary>
+    /// Not actually a voxel, but potentially a cuboid with arbitrary dimension.
+    /// </summary>
     public class Voxel
     {
         public Voxel( ushort positionX, ushort positionY, ushort positionZ, ushort sizeX = 1, ushort sizeY = 1, ushort sizeZ = 1 )
@@ -13,6 +16,16 @@ namespace VoxelMerger
             SizeX = sizeX;
             SizeY = sizeY;
             SizeZ = sizeZ;
+        }
+        
+        public Voxel( int positionX, int positionY, int positionZ )
+        {
+            PositionX = (ushort)positionX;
+            PositionY = (ushort)positionY;
+            PositionZ = (ushort)positionZ;
+            SizeX = 1;
+            SizeY = 1;
+            SizeZ = 1;
         }
 
         public ushort PositionX { get; private set; }
@@ -37,31 +50,7 @@ namespace VoxelMerger
                 reader.ReadUInt16(),
                 reader.ReadUInt16() );
         }
-
-        public ushort GetSize( int dimension )
-        {
-            switch( dimension )
-            {
-                case 0: return SizeX;
-                case 1: return SizeY;
-                case 2: return SizeZ;
-                default:
-                    throw new ArgumentOutOfRangeException( nameof(dimension) );
-            }
-        }
-
-        public ushort GetPosition( int dimension )
-        {
-            switch( dimension )
-            {
-                case 0: return PositionX;
-                case 1: return PositionY;
-                case 2: return PositionZ;
-                default:
-                    throw new ArgumentOutOfRangeException( nameof(dimension) );
-            }
-        }
-
+       
         public bool CanMerge( Voxel other )
         {
             if( PositionX + SizeX == other.PositionX || other.PositionX + other.SizeX == PositionX )

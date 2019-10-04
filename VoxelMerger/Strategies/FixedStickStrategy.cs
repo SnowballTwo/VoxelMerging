@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using VoxelMerger.Model;
 
 namespace VoxelMerger.Strategies
 {
@@ -26,9 +27,9 @@ namespace VoxelMerger.Strategies
             }
         }
 
-        public override Defect Compress( Defect defect )
+        public override VoxelGroup Compress( VoxelGroup voxelGroup )
         {
-            return new Defect( defect, CreateSticks( defect, _Dimension ).SelectMany( a => a.Where( v => v != null ).SelectMany( b => b.Where( v => v != null ) ) ).ToArray());
+            return new VoxelGroup( voxelGroup, CreateSticks( voxelGroup, _Dimension ).SelectMany( a => a.Where( v => v != null ).SelectMany( b => b.Where( v => v != null ) ) ).ToArray());
         }
     }
 }
